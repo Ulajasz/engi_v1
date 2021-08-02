@@ -1,6 +1,9 @@
-from clean_text import clean_txt as ctxt
+from clean_text import clean_txt
 
 
-def __main__():
+def main():
     link = input('Link:')
-    print(ctxt(link))
+    print(clean_txt(link))
+
+
+main()
