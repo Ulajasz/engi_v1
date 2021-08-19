@@ -3,13 +3,36 @@ import requests
 import re
 import nltk
 import json
+import sys
+import zipfile
 import lxml
+import textract
 
-def clean_txt(link):
+def clean_txt(input_text):
 
     with open("stopwords.json", "r+", encoding="utf-8") as s_words:
         stopwords = json.load(s_words)
-    raw = requests.get(link)
+
+    #ekstrakcja tekstu z plików o różnych rozszerzeniach
+    if input_text.endswith('.odt'):
+        with zipfile.ZipFile(input_text, 'r') as zfp:
+            with zfp.open('content.xml') as fp:
+                raw = bs.BeautifulSoup(fp.read(), 'xml')
+
+    elif input_text.endswith('.docx'):
+        with zipfile.ZipFile(input_text, 'r') as zfp:
+            with zfp.open('word/document.xml') as fp:
+                raw = bs.BeautifulSoup(fp.read(), 'xml')
+    # elif input_text.endswith('.doc'):
+    #     with zipfile.ZipFile(input_text, 'r') as zfp:
+    #         with zfp.open('[Content_Types].xml') as fp:
+    #             raw = bs.BeautifulSoup(fp.read(), 'xml')
+
+    #elif input_text.endswith('.pdf'):
+    #    raw = textract.process(input_text)
+    elif input_text.startswith('http'):
+        raw = requests.get(input_text)
+
     parsed_text = bs.BeautifulSoup(raw.text, 'lxml')
     paragraphs = parsed_text.find_all('p')
     raw_text = ""
@@ -22,7 +45,6 @@ def clean_txt(link):
         '(\w+)',
         temp_text,
     )
-
     #przygotowanie danych
     #all_lines = nltk.sent_tokenize(temp_text)
     #nltk.download('punkt')
@@ -31,5 +53,4 @@ def clean_txt(link):
 
     # Stop Words
     #for i in range(len(all_words)):
-
     return (all_words)
