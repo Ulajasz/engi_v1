@@ -57,5 +57,7 @@ def clean_txt(input_text):
     all_words = [nltk.word_tokenize(sent) for sent in all_lines]
     for i in range(len(all_words)):
         all_words[i] = [w for w in all_words[i] if w not in stopwords]
-    #fndiufhisufh
+
+    print(all_words)
+
     return all_words
