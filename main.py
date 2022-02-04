@@ -8,9 +8,9 @@ def main():
     x = clean_txt(input_text)
 
     #word = input('Słowo do sima: ')
-    sim_word(x)
+    #sim_word(x)
     #print(type(clean_txt))
 
-
+    #print(x)
 main()
 

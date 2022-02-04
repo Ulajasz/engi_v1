@@ -39,14 +39,9 @@ def clean_txt(input_text):
     #czyszczenie tekstu
     for p in paragraphs:
         raw_text += p.text
-    #temp_text = raw_text.lower()
-    #temp_text = re.findall(
-    #     '(\w+)',
-    #     temp_text,
-    #)
     temp_text = raw_text.lower()
-    temp_text = re.sub('[^a-zżźćńęółśą]', ' ', temp_text)
-    temp_text = re.sub(r'\s+', ' ', temp_text)
+    temp_text = re.sub('[^a-zżźćńęółśą.]', ' ', temp_text)
+    #temp_text = re.sub(r'\s+', ' ', temp_text)
 
     #przygotowanie danych
     all_lines = nltk.sent_tokenize(temp_text)
@@ -57,6 +52,7 @@ def clean_txt(input_text):
     all_words = [nltk.word_tokenize(sent) for sent in all_lines]
     for i in range(len(all_words)):
         all_words[i] = [w for w in all_words[i] if w not in stopwords]
+        all_words[i] = [w for w in all_words[i] if len(w)>2]
 
     print(all_words)
 
