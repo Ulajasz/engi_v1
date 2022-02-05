@@ -1,6 +1,6 @@
 from clean_text import clean_txt
 from sim_word import sim_word
-
+from vocabulary import vocabulary
 
 def main():
 
@@ -8,9 +8,9 @@ def main():
     x = clean_txt(input_text)
 
     #word = input('Słowo do sima: ')
-    #sim_word(x)
+    y = sim_word(x)
     #print(type(clean_txt))
-
+    vocabulary(y)
     #print(x)
 main()
 
