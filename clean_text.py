@@ -5,7 +5,7 @@ import nltk
 import json
 import zipfile
 import lxml
-import textract
+
 
 def clean_txt(input_text):
 
@@ -22,13 +22,7 @@ def clean_txt(input_text):
         with zipfile.ZipFile(input_text, 'r') as zfp:
             with zfp.open('word/document.xml') as fp:
                 raw = bs.BeautifulSoup(fp.read(), 'xml')
-    # elif input_text.endswith('.doc'):
-    #     with zipfile.ZipFile(input_text, 'r') as zfp:
-    #         with zfp.open('[Content_Types].xml') as fp:
-    #             raw = bs.BeautifulSoup(fp.read(), 'xml')
 
-    #elif input_text.endswith('.pdf'):
-    #    raw = textract.process(input_text)
     elif input_text.startswith('http'):
         raw = requests.get(input_text)
 
@@ -45,15 +39,9 @@ def clean_txt(input_text):
 
     #przygotowanie danych
     all_lines = nltk.sent_tokenize(temp_text)
-    #nltk.download('punkt')
-    #all_words = [w for w in temp_text if w not in stopwords]
-    #all_words = [nltk.word_tokenize(sent) for sent in all_words]
-
     all_words = [nltk.word_tokenize(sent) for sent in all_lines]
     for i in range(len(all_words)):
         all_words[i] = [w for w in all_words[i] if w not in stopwords]
         all_words[i] = [w for w in all_words[i] if len(w) > 2]
-
-    #print(all_words)
 
     return all_words
