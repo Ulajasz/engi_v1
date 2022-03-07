@@ -16,5 +16,5 @@ def check_dict(clean_text):
                 skipped +=1
                 pass
 
-    print(skipped, " słów nie ma w słowniku")
-    return result
+    #print(skipped, " słów nie ma w słowniku")
+    return result, skipped

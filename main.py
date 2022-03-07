@@ -35,12 +35,11 @@ class Default(tk.Tk):
 
     #uruchamianie poszczególnych okienek
 
-    def show_frame(self, cont, similarity = []):
+    def show_frame(self, cont, temp=()):
         frame = self.frames[cont]
-        #to chyba zmienić na wykres
+
         if type(frame) is Resultp:
-            frame.plot(similarity)
-        #frame.pack(fill="both", expand=1)
+            frame.plot(temp)
         frame.tkraise()
 
 #ramka początkowa
@@ -84,9 +83,12 @@ class Mainp(tk.Frame):
     def show_results(self):
 
          txt = clean_txt(self.address.get())
-         text_in_dict = check_dict(txt)
+         temp = check_dict(txt)
+         text_in_dict = temp[0]
+         skipped = temp[1]
          similarity = tp(text_in_dict)
-         self.controller.show_frame(Resultp, similarity)
+         temp2 = (similarity, skipped)
+         self.controller.show_frame(Resultp, temp2)
 
     def check_if_valid(self):
         if self.address.get().startswith('http') or self.address.get().endswith('.odt') or self.address.get().endswith('.docx'):
@@ -109,9 +111,10 @@ class Resultp(tk.Frame):
         self.parent = parent
         button_font = tkfont.Font(family="Times", size="14", weight="bold")
 
+
         #inicjowane widgety
-        # self.placeholder = tk.Label(self, text="cos")
-        # self.placeholder.place(x = 100, y = 100)
+        # self.placeholder = tk.Label(self, text=text_var)
+        # self.placeholder.place(x = 550, y = 100)
 
         back_win = tk.Button(self, text="Wykonaj ponownie",
                                    command=lambda: controller.show_frame(Mainp),
@@ -130,12 +133,16 @@ class Resultp(tk.Frame):
         exitb.place(x = 550, y = 400)
 
     #wyświetlanie wykresu
-    def plot(self, similarity):
-        if similarity is not None:
-            fig = draw_plot.draw_plot(similarity)
+    def plot(self, temp):
+        if temp is not None:
+            result = draw_plot.draw_plot(temp)
+            fig = result[0]
             canvas = FigureCanvasTkAgg(fig)
             canvas.get_tk_widget().place(x = 20, y = 20)
             canvas.draw()
+            text_var = "Pominięto {} słów z wprowadzonego tekstu.".format(result[1])
+            self.placeholder = tk.Label(self, text=text_var)
+            self.placeholder.place(x = 550, y = 100)
         else:
             self.placeholder.configure(text="Wystąpił błąd")
 
